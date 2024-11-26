@@ -3,7 +3,19 @@ const e = require('express')
 
 const app = e()
 
-const port = 3001
+const port = process.env.PORT
+
+const mongoose = require('mongoose')
+
+try {
+	const connection = mongoose.connect(process.env.MONGO_URI)
+		.then(() => console.log('Connected to MongoDB Atlas.'));
+	if (!connection) { throw new Error("Failed to connect!") }
+}
+catch (err) {
+	console.log(err.message)
+}
+
 
 app.get('/', (req, res) => {
 	res.send('Hello from root!')
