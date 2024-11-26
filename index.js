@@ -1,3 +1,4 @@
+require('dotenv').config()
 const e = require('express')
 
 const app = e()
