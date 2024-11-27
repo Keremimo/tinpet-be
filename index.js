@@ -1,12 +1,13 @@
 require('dotenv').config()
 const e = require('express')
 const passport = require('passport')
+const passportLocalMongoose = require('passport-local-mongoose')
+const mongoose = require('mongoose')
+const session = require('express-session')
 
 const app = e()
 
 const port = process.env.PORT
-
-const mongoose = require('mongoose')
 
 mongoose.connect(process.env.MONGO_URI)
 	.then(() => console.log('Connected to MongoDB Atlas.'));
