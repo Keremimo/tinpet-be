@@ -1,5 +1,6 @@
 require('dotenv').config()
 const e = require('express')
+const passport = require('passport')
 
 const app = e()
 
@@ -7,15 +8,8 @@ const port = process.env.PORT
 
 const mongoose = require('mongoose')
 
-try {
-	const connection = mongoose.connect(process.env.MONGO_URI)
-		.then(() => console.log('Connected to MongoDB Atlas.'));
-	if (!connection) { throw new Error("Failed to connect!") }
-}
-catch (err) {
-	console.log(err.message)
-}
-
+mongoose.connect(process.env.MONGO_URI)
+	.then(() => console.log('Connected to MongoDB Atlas.'));
 
 app.get('/', (req, res) => {
 	res.send('Hello from root!')
