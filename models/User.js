@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -17,10 +19,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: [true, 'Email already exists.'],
-        match: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, 
+        match: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
         require: true,
         trim: true
     }
 });
 
-module.exports = userSchema;
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
