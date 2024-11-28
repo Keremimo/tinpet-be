@@ -3,6 +3,7 @@ const e = require('express')
 const passport = require('passport')
 const passportLocalMongoose = require('passport-local-mongoose')
 const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')
 const session = require('express-session')
 const LocalStrategy = require('passport-local')
 const User = require('./models/User')
@@ -18,8 +19,35 @@ app.use(session({
 	secret: process.env.SECRET,
 	resave: false,
 	saveUninitialized: false,
-	cookie: { secure: false } //FIX: MAKE SECURE TRUE FOR PRODUCTION! DO NOT FORGET!
+	store: MongoStore.create({ //INFO: Will save session data to MongoDB.
+		mongoUrl: process.env.MONGO_URI,
+		ttl: 14 * 24 * 60 * 60,
+		autoRemove: 'interval',
+		autoRemoveInterval: 10 //INFO: this number is in minutes
+	}),
+	cookie: {
+		secure: process.env.NODE_ENV === 'production',
+		httpOnly: true,
+		//TODO: Add sameSite later to prevent CSRF
+		maxAge: 14 * 24 * 60 * 60 * 1000 //INFO: Expires in 14 days
+	}
 }))
+
+function generateAccessToken(user) { // JWT Generation
+	return jwt.sign({
+		id: user._id,
+		username: user.username
+	},
+		process.env.JWT_SECRET,
+		{
+			expiresIn: '24h'
+		}
+	)
+}
+
+function authenticateToken(req, res, next) { // Middleware to verify JWT
+
+}
 
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
@@ -28,17 +56,24 @@ passport.deserializeUser(User.deserializeUser())
 mongoose.connect(process.env.MONGO_URI)
 	.then(() => console.log('Connected to MongoDB Atlas.'));
 
-app.post('/api/v1/register', (req, res) => {
-	User.register(new User({ username: req.body.username, email: req.body.email }), req.body.password, (err, user) => {
-		if (err) {
-			const error = err.message
-			res.status(500).json({ result: "Fail", data: "An error has occurred while registering." })
-			return
-			//INFO: Returns nothing, it is to prevent code from reaching passport.authenticate upon error
-		}
-		passport.authenticate('local')(req, res, () => { res.status(200).json({ result: "Success", data: user }) })
+app.post('/api/v1/register', async (req, res) => {
+	try {
+		const { username, email, password } = req.body
+		const registeredUser = await User.register(new User({ username: username, email: email }), password)
+		const token = generateAccessToken(registeredUser)
+		res.status(201).json({
+			result: "Success",
+			data: {
+				id: registeredUser._id,
+				username: registeredUser.username
+			},
+			token
+		})
 		//INFO: Returns JSON in either case, check for result in the JSON it can either be "Success" or "Fail" and make your frontend code act accordingly.
-	})
+	} catch (error) {
+		res.status(500).json({ result: "Fail", data: "Error when registering: " + error.message })
+	}
+
 })
 
 app.listen(port, () => {
