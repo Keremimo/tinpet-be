@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
-    email: {
+    email: { //TODO: Add constraints for min-max characters
         type: String,
         unique: [true, 'Email already exists.'],
         match: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
