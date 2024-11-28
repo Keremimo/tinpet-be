@@ -59,8 +59,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.post('/api/v1/register', async (req, res) => {
 	try {
-		const { username, email, password } = req.body
-		const registeredUser = await User.register(new User({ username: username, email: email }), password)
+		const { username, email, password, name } = req.body
+		const registeredUser = await User.register(new User({ username: username, email: email, name: name }), password)
 		const token = generateAccessToken(registeredUser)
 		res.status(201).json({
 			message: "Registration successful!",
