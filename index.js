@@ -18,7 +18,7 @@ app.use(session({
 	secret: process.env.SECRET,
 	resave: false,
 	saveUninitialized: false,
-	cookie: { secure: false } //WARN: MAKE SECURE TRUE FOR PRODUCTION! DO NOT FORGET!
+	cookie: { secure: false } //FIX: MAKE SECURE TRUE FOR PRODUCTION! DO NOT FORGET!
 }))
 
 passport.use(new LocalStrategy(User.authenticate()))
