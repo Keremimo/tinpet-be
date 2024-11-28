@@ -4,6 +4,7 @@ const passport = require('passport')
 const passportLocalMongoose = require('passport-local-mongoose')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const User = require('./models/User')
 
 const app = e()
 
