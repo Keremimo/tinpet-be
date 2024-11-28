@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
         match: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
         require: true,
         trim: true
+    },
+    name: {
+        type: String,
+        require: true,
+        trim: true
     }
 });
 
