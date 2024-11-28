@@ -1,4 +1,10 @@
-const petSchema = new mongoose.Schema ({
+const mongoose = require('mongoose')
+
+const petSchema = new mongoose.Schema({
+    id: {
+        type: UUID,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
@@ -21,4 +27,6 @@ const petSchema = new mongoose.Schema ({
     }
 });
 
-module.exports = petSchema;
+const Pet = mongoose.model('Pet', petSchema)
+
+module.exports = Pet;

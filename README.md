@@ -12,6 +12,28 @@ Passport is used for authentication, with JOI as the input sanitization.
 On successful attempt it returns a token. On failure it returns an error. 
 
 POST ('api/v1/register') -> Sends a registration request to the backend.
+Here's a fetch request example (Must be in an async function)
+```jsx
+try{
+const response = await fetch('/api/v1/register', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({username: username, email: email, password: password})
+}) //INFO: This will return a JSON on both success and failure
+    const result = await response.json()
+    if(response.ok){
+        //INFO: external useState function
+    setSuccessMessage(result.message || "Registration successful!") 
+    //TODO: Grab the JSON Web Token from the JSON and put it inside a cookie.
+    }
+} catch(err){
+    setErrorMessage("An error occurred while trying to register.")
+    console.error(err)
+}
+
+```
 
 POST ('api/v1/login') -> Sends a login request to the backend.
 
