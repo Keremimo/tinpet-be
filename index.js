@@ -62,8 +62,8 @@ app.post('/api/v1/register', async (req, res) => {
 		const registeredUser = await User.register(new User({ username: username, email: email }), password)
 		const token = generateAccessToken(registeredUser)
 		res.status(201).json({
-			result: "Success",
-			data: {
+			message: "Registration successful!",
+			user: {
 				id: registeredUser._id,
 				username: registeredUser.username
 			},
@@ -71,7 +71,7 @@ app.post('/api/v1/register', async (req, res) => {
 		})
 		//INFO: Returns JSON in either case, check for result in the JSON it can either be "Success" or "Fail" and make your frontend code act accordingly.
 	} catch (error) {
-		res.status(500).json({ result: "Fail", data: "Error when registering: " + error.message })
+		res.status(500).json({ message: "Error when registering: " + error.message })
 	}
 
 })
