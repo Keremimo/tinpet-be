@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo')
 const session = require('express-session')
 const LocalStrategy = require('passport-local')
 const User = require('./models/User')
+const jwt = require('jsonwebtoken')
 
 const app = e()
 
