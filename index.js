@@ -4,7 +4,6 @@ const passport = require('passport')
 const passportLocalMongoose = require('passport-local-mongoose')
 const mongoose = require('mongoose')
 const session = require('express-session')
-const bodyParser = require('body-parser')
 const LocalStrategy = require('passport-local')
 const User = require('./models/User')
 
@@ -14,8 +13,8 @@ const app = e()
 const port = process.env.PORT
 
 //TODO: Move middlewares to an exported module later
-app.use(bodyParser.urlencoded({ extended: true })) // For req.body to be parsed
-app.use(bodyParser.json()) // For incoming JSON to be parsed
+app.use(e.urlencoded({ extended: true }))
+app.use(e.json())
 
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
