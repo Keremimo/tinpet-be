@@ -76,6 +76,10 @@ app.post('/api/v1/register', async (req, res) => {
 	}
 })
 
+app.post('/api/v1/login', async (req, res) => {
+
+})
+
 app.listen(port, () => {
 	console.log(`The pets are up for adoption in the API port ${port}`)
 })
