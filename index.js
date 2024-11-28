@@ -13,8 +13,8 @@ const app = e()
 const port = process.env.PORT
 
 //TODO: Move middlewares to an exported module later
-app.use(e.urlencoded({ extended: true }))
-app.use(e.json())
+app.use(e.urlencoded({ extended: true })) // For parsing req.body
+app.use(e.json()) // For parsing incoming JSON
 
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
