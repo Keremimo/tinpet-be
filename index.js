@@ -74,7 +74,6 @@ app.post('/api/v1/register', async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ message: "Error when registering: " + error.message })
 	}
-
 })
 
 app.listen(port, () => {
