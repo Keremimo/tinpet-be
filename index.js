@@ -28,10 +28,6 @@ passport.deserializeUser(User.deserializeUser())
 mongoose.connect(process.env.MONGO_URI)
 	.then(() => console.log('Connected to MongoDB Atlas.'));
 
-app.get('/', (req, res) => {
-	res.send('Hello from root!')
-})
-
 app.post('/api/v1/register', (req, res) => {
 	User.register(new User({ username: req.body.username, email: req.body.email }), req.body.password, (err, user) => {
 		if (err) {
