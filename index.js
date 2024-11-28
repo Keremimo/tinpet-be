@@ -70,7 +70,7 @@ app.post('/api/v1/register', async (req, res) => {
 			},
 			token
 		})
-		//INFO: Returns JSON in either case, check for result in the JSON it can either be "Success" or "Fail" and make your frontend code act accordingly.
+		//INFO: Returns JSON in either case, check the code above for success and below for failure to see what kind of return you can get and code your logic accordingly.
 	} catch (error) {
 		res.status(500).json({ message: "Error when registering: " + error.message })
 	}
