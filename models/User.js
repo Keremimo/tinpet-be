@@ -35,7 +35,7 @@ userSchema.plugin(passportLocalMongoose, {
     }
 })
 
-userSchema.methods.updateLastLogin = () => {
+userSchema.methods.updateLastLogin = function () {
     this.lastLogin = new Date()
     return this.save()
 }
