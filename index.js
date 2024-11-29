@@ -78,7 +78,7 @@ app.post('/api/v1/register', async (req, res) => {
 		})
 		//INFO: Returns JSON in either case, check the code above for success and below for failure to see what kind of return you can get and code your logic accordingly.
 	} catch (error) {
-		res.status(500).json({ message: "Error when registering: " + error.message })
+		res.status(500).json({ message: "Error when registering: ", error: error.message })
 	}
 })
 
