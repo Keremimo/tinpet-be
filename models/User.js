@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(passportLocalMongoose, {
     usernameField: 'username',
+    limitAttempts: true,
+    maxAttempts: 5,
+    intervalTime: 1 * 60 * 1000, //TODO: Needs to be changed to 15 minutes in prod
     errorMessages: {
         UserExistsError: 'A user with this username already exists.',
         IncorrectPasswordError: 'Incorrect username or password',
