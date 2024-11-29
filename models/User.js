@@ -13,10 +13,29 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         trim: true
+    },
+    lastLogin: {
+        type: Date
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
-userSchema.plugin(passportLocalMongoose)
+userSchema.plugin(passportLocalMongoose, {
+    usernameField: 'username',
+    errorMessages: {
+        UserExistsError: 'A user with this username already exists.',
+        IncorrectPasswordError: 'Incorrect username or password',
+        IncorrectUsernameError: 'Incorrect username or password'
+    }
+})
+
+userSchema.methods.updateLastLogin = () => {
+    this.lastLogin = new Date()
+    return this.save()
+}
 
 const User = mongoose.model('User', userSchema)
 
