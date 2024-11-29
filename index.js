@@ -1,7 +1,6 @@
 require('dotenv').config()
 const e = require('express')
 const passport = require('passport')
-const passportLocalMongoose = require('passport-local-mongoose')
 const mongoose = require('mongoose')
 const MongoStore = require('connect-mongo')
 const session = require('express-session')
