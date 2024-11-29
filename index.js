@@ -61,13 +61,20 @@ app.post('/api/v1/register', async (req, res) => {
 		const { username, email, password, name } = req.body
 		const registeredUser = await User.register(new User({ username: username, email: email, name: name }), password)
 		const token = generateAccessToken(registeredUser)
+
+		res.cookie('token', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			//TODO: Replace this line with sameSite: 'strict' in prod
+			maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+		})
+
 		res.status(201).json({
 			message: "Registration successful!",
 			user: {
 				id: registeredUser._id,
 				username: registeredUser.username
-			},
-			token
+			}
 		})
 		//INFO: Returns JSON in either case, check the code above for success and below for failure to see what kind of return you can get and code your logic accordingly.
 	} catch (error) {
