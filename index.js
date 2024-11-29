@@ -45,18 +45,40 @@ function generateAccessToken(user) { // JWT Generation
 	)
 }
 
-function authenticateToken(req, res, next) { // Middleware to verify JWT
+const login = async (req, res) => {
+	try {
+		if (req.user) {
+			const user = req.user
+			await user.updateLastLogin()
 
+			const token = generateAccessToken(user)
+
+			res.cookie('token', token, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production',
+				sameSite: 'strict',
+				maxAge: 24 * 60 * 60 * 1000 // 24 hours
+			})
+
+			res.json({
+				message: 'Login successful',
+				user: {
+					id: user._id,
+					username: user.username
+				}
+			})
+		} else {
+			res.status(401).json({ message: 'Authentication failed.' })
+		}
+	} catch (err) {
+		res.status(500).json({
+			message: 'Error logging in:',
+			error: err.message
+		})
+	}
 }
 
-passport.use(new LocalStrategy(User.authenticate()))
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
-
-mongoose.connect(process.env.MONGO_URI)
-	.then(() => console.log('Connected to MongoDB Atlas.'));
-
-app.post('/api/v1/register', async (req, res) => {
+const register = async (req, res) => {
 	try {
 		const { username, email, password, name } = req.body
 		const registeredUser = await User.register(new User({ username: username, email: email, name: name }), password)
@@ -80,11 +102,18 @@ app.post('/api/v1/register', async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ message: "Error when registering: ", error: error.message })
 	}
-})
+}
 
-app.post('/api/v1/login', async (req, res) => {
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
-})
+mongoose.connect(process.env.MONGO_URI)
+	.then(() => console.log('Connected to MongoDB Atlas.'));
+
+app.post('/api/v1/register', register)
+
+app.post('/api/v1/login', passport.authenticate('local'), login)
 
 app.listen(port, () => {
 	console.log(`The pets are up for adoption in the API port ${port}`)
