@@ -7,14 +7,22 @@ const session = require('express-session')
 const LocalStrategy = require('passport-local')
 const User = require('./models/User')
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 
 const app = e()
 
 const port = process.env.PORT
 
+const corsOptions = {
+	credentials: true,
+	origin: 'http://localhost:3000',
+	optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 //TODO: Move middlewares to an exported module later
 app.use(e.urlencoded({ extended: true })) // For parsing req.body
 app.use(e.json()) // For parsing incoming JSON
+app.use(cors(corsOptions))
 app.use(session({
 	secret: process.env.SECRET,
 	resave: false,
@@ -56,7 +64,7 @@ const login = async (req, res) => {
 			res.cookie('token', token, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
-				sameSite: 'strict',
+				// sameSite: 'strict', //TODO: make sure this is enabled later in prod
 				maxAge: 24 * 60 * 60 * 1000 // 24 hours
 			})
 
