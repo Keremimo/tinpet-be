@@ -35,12 +35,12 @@ const response = await fetch('/api/v1/register', {
 
 ```
 
-POST ('api/v1/login') -> Sends a login request to the backend.
+POST ('api/v1/login') -> Sends a login request to the backend. Requires a JSON body of {username: test, password: test} to be sent. (Test as an example)
 
 ### Data routes:
 Returns a JSON array of object on success, error on failure.
 
-GET ('api/v1/pets') -> Return all pets (Maximum amount needs to be specified) 
+GET ('api/v1/pets/get-all') -> Return all pets as JSON (Maximum amount needs to be specified later) 
 GET ('api/v1/user:id') -> Return user profile based on ID. 
 
 To be appended further...
