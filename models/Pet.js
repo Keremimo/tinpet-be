@@ -15,6 +15,16 @@ const petSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    gender: {
+        type: String,
+        enum: ["Male", "Female"],
+        required: true,
+        trim: true
+    },
+    neutered: {
+        type: Boolean,
+        default: false
+    },
     species: {
         type: String,
         enum: {
@@ -26,6 +36,11 @@ const petSchema = new mongoose.Schema({
             ],
             message: "Can only be Dog, Cat, Bird or Fish."
         },
+        required: true,
+        trim: true
+    },
+    breed: {
+        type: String,
         required: true,
         trim: true
     },
