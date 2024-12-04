@@ -20,7 +20,7 @@ async function seedDatabase() {
 		{ id: uuidv4(), name: "Zoe", age: 6, species: "Dog", breed: "Shiba Inu", gender: "Female", stats: { house: "Apartment", children: false, trained: true }, picture: "12.jpg" },
 		{ id: uuidv4(), name: "Finn", age: 3, species: "Dog", breed: "Mastiff", gender: "Male", stats: { house: "Large", children: true, trained: false }, picture: "13.jpg" },
 		{ id: uuidv4(), name: "Rex", age: 2, species: "Dog", breed: "Rottweiler", gender: "Male", stats: { house: "Medium", children: false, trained: true }, picture: "14.jpg" },
-		{ id: uuidv4(), name: "Coco", age: 1, species: "Dog", breed: "Chihuahua", gender: "Female", stats: { house: "Apartment", children: false, trained: true }, picture: "15.jpg" },
+		{ id: uuidv4(), name: "Pedro", age: 1, species: "Dog", breed: "Chihuahua", gender: "Male", stats: { house: "Apartment", children: false, trained: true }, picture: "15.jpg" },
 		{ id: uuidv4(), name: "Ruby", age: 3, species: "Dog", breed: "Samoyed", gender: "Female", stats: { house: "Medium", children: true, trained: true }, picture: "16.jpg" },
 		{ id: uuidv4(), name: "Shadow", age: 5, species: "Dog", breed: "Great Dane", gender: "Male", stats: { house: "Large", children: true, trained: false }, picture: "17.jpg" },
 		{ id: uuidv4(), name: "Ginger", age: 2, species: "Dog", breed: "Border Collie", gender: "Female", stats: { house: "Large", children: true, trained: true }, picture: "18.jpg" },
