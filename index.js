@@ -8,6 +8,7 @@ const LocalStrategy = require('passport-local')
 const User = require('./models/User')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
+const Pet = require('./models/Pet')
 
 const app = e()
 
@@ -108,7 +109,16 @@ const register = async (req, res) => {
 		})
 		//INFO: Returns JSON in either case, check the code above for success and below for failure to see what kind of return you can get and code your logic accordingly.
 	} catch (error) {
-		res.status(500).json({ message: "Error when registering: ", error: error.message })
+		res.status(500).json({ message: "Error when registering: ", error: err.message })
+	}
+}
+
+const getAllAnimals = async (req, res) => {
+	try {
+		const petList = await Pet.find({})
+		res.status(200).json(petList)
+	} catch (err) {
+		res.status(500).json({ message: "Error fetching pets: ", error: err.message })
 	}
 }
 
@@ -118,6 +128,8 @@ passport.deserializeUser(User.deserializeUser())
 
 mongoose.connect(process.env.MONGO_URI)
 	.then(() => console.log('Connected to MongoDB Atlas.'));
+
+app.get('/api/v1/pets/get-all', getAllAnimals)
 
 app.post('/api/v1/register', register)
 
