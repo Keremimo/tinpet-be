@@ -39,21 +39,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-passport.use(new LocalStrategy(User.authenticate()))
-passport.serializeUser((user, done) => {
-	console.log('Serializing user:', user.id);
-	done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-	console.log('Deserializing user:', id);
-	User.findById(id)
-		.then(user => {
-			console.log('Deserialized user:', user);
-			done(null, user);
-		})
-		.catch(err => done(err));
-});
+passport.use(User.createStrategy())
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 function generateAccessToken(user) { // JWT Generation
 	return jwt.sign({
@@ -113,26 +101,65 @@ const login = async (req, res) => {
 const register = async (req, res) => {
 	try {
 		const { username, email, password, name } = req.body
-		const registeredUser = await User.register(new User({ username: username, email: email, name: name }), password)
-		const token = generateAccessToken(registeredUser)
-
-		res.cookie('token', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			//TODO: Replace this line with sameSite: 'strict' in prod
-			maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+		const newUser = new User({
+			username: username,
+			email: email,
+			name: name
 		})
 
-		res.status(201).json({
-			message: "Registration successful!",
-			user: {
-				id: registeredUser._id,
-				username: registeredUser.username
+		User.register(newUser, password, (err, user) => {
+			if (err) {
+				console.error('Registration error:', err);
+				return res.status(500).json({
+					message: "Error when registering",
+					error: err.message
+				})
 			}
+
+			// If user is not properly created, return an error
+			if (!user) {
+				return res.status(500).json({
+					message: "User registration failed",
+					error: "User object is undefined"
+				})
+			}
+
+			req.login(user, (loginErr) => {
+				if (loginErr) {
+					console.error('Login error:', loginErr);
+					return res.status(500).json({
+						message: "Error logging in after registration",
+						error: loginErr.message
+					})
+				}
+
+				// Safe token generation with fallback
+				let token;
+				try {
+					token = generateAccessToken(user);
+				} catch (tokenErr) {
+					console.error('Token generation error:', tokenErr);
+					return res.status(500).json({
+						message: "Error generating access token",
+						error: tokenErr.message
+					})
+				}
+
+				res.status(201).json({
+					message: "Registration successful!",
+					user: {
+						id: user._id,
+						username: user.username
+					}
+				})
+			})
 		})
-		//INFO: Returns JSON in either case, check the code above for success and below for failure to see what kind of return you can get and code your logic accordingly.
-	} catch (error) {
-		res.status(500).json({ message: "Error when registering: ", error: err.message })
+	} catch (err) {
+		console.error('Catch block error:', err);
+		res.status(500).json({
+			message: "Error when registering: ",
+			error: err.message
+		})
 	}
 }
 
