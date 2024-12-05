@@ -28,12 +28,6 @@ app.use(session({
 	secret: process.env.SECRET,
 	resave: false,
 	saveUninitialized: false,
-	store: MongoStore.create({ //INFO: Will save session data to MongoDB.
-		mongoUrl: process.env.MONGO_URI,
-		ttl: 14 * 24 * 60 * 60,
-		autoRemove: 'interval',
-		autoRemoveInterval: 10 //INFO: this number is in minutes
-	}),
 	cookie: {
 		secure: process.env.NODE_ENV === 'production',
 		httpOnly: true,
@@ -41,6 +35,25 @@ app.use(session({
 		maxAge: 14 * 24 * 60 * 60 * 1000 //INFO: Expires in 14 days
 	}
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser((user, done) => {
+	console.log('Serializing user:', user.id);
+	done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+	console.log('Deserializing user:', id);
+	User.findById(id)
+		.then(user => {
+			console.log('Deserialized user:', user);
+			done(null, user);
+		})
+		.catch(err => done(err));
+});
 
 function generateAccessToken(user) { // JWT Generation
 	return jwt.sign({
@@ -52,6 +65,16 @@ function generateAccessToken(user) { // JWT Generation
 			expiresIn: '24h'
 		}
 	)
+}
+
+function isAuthenticated(req, res, next) {
+	console.log(req.user)
+	if (req.user) {
+		console.log('Authenticated successfully')
+		return next()
+	}
+	console.log('Not authenticated!')
+	return res.redirect('/login')
 }
 
 const login = async (req, res) => {
@@ -122,14 +145,10 @@ const getAllAnimals = async (req, res) => {
 	}
 }
 
-passport.use(new LocalStrategy(User.authenticate()))
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
-
 mongoose.connect(process.env.MONGO_URI)
 	.then(() => console.log('Connected to MongoDB Atlas.'));
 
-app.get('/api/v1/pets/get-all', getAllAnimals)
+app.get('/api/v1/pets/get-all', isAuthenticated, getAllAnimals)
 
 app.post('/api/v1/register', register)
 
