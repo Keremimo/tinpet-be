@@ -126,19 +126,18 @@ const register = async (req, res) => {
 
 			req.login(user, (loginErr) => {
 				if (loginErr) {
-					console.error('Login error:', loginErr);
+					console.error('Login error:', loginErr)
 					return res.status(500).json({
 						message: "Error logging in after registration",
 						error: loginErr.message
 					})
 				}
 
-				// Safe token generation with fallback
 				let token;
 				try {
-					token = generateAccessToken(user);
+					token = generateAccessToken(user)
 				} catch (tokenErr) {
-					console.error('Token generation error:', tokenErr);
+					console.error('Token generation error:', tokenErr)
 					return res.status(500).json({
 						message: "Error generating access token",
 						error: tokenErr.message
@@ -173,7 +172,7 @@ const getAllAnimals = async (req, res) => {
 }
 
 mongoose.connect(process.env.MONGO_URI)
-	.then(() => console.log('Connected to MongoDB Atlas.'));
+	.then(() => console.log('Connected to MongoDB Atlas.'))
 
 app.get('/api/v1/pets/get-all', isAuthenticated, getAllAnimals)
 
