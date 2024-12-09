@@ -65,7 +65,12 @@ const petSchema = new mongoose.Schema({
         type: String, //Add URL or img path
         required: true,
         trim: true
+    },
+    description: {
+        type: String,
+        required: true
     }
+    
 });
 
 const Pet = mongoose.model('Pet', petSchema)
