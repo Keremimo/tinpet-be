@@ -63,6 +63,7 @@ const petSchema = new mongoose.Schema({
     },
     picture: {
         type: String, //Add URL or img path
+        default: '',
         required: false,
         trim: true
     },
