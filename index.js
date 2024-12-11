@@ -171,11 +171,12 @@ const getAllAnimals = async (req, res) => {
 	}
 }
 
-const findOneAnimal = async (req, res) => {
+const findAnimals = async (req, res) => {
 	try {
-		const singlePet = await Pet.findOne({ id: req.query.id })
-		console.log(req.query.id, singlePet)
-		res.status(200).json({ singlePet })
+		const { searchParams } = req.body
+		const foundPets = await Pet.find({ ...searchParams })
+		console.log(req.query.id, foundPets)
+		res.status(200).json({ foundPets })
 	} catch (err) {
 		res.status(500).json({
 			message: "An error occurred fetching the data: " + err.message
@@ -188,7 +189,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.get('/api/v1/pets/get-all', isAuthenticated, getAllAnimals)
 
-app.get('/api/v1/pets/', findOneAnimal)
+app.post('/api/v1/pets/find', findAnimals)
 
 app.post('/api/v1/register', register)
 
