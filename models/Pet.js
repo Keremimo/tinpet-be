@@ -68,9 +68,9 @@ const petSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
+        required: false
     }
-    
+
 });
 
 const Pet = mongoose.model('Pet', petSchema)
