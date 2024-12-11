@@ -174,9 +174,10 @@ const getAllAnimals = async (req, res) => {
 const postAnimal = async (req, res) => {
 	try {
 		const { entries } = req.body
-		/* const newPet = Pet. */
+		Pet.insertMany([{ ...entries }])
+		res.status(200).json({ message: "Successfully posted the new pet." })
 	} catch (err) {
-
+		res.status(500).json({ message: "Error posting pet: " + err.message })
 	}
 }
 
