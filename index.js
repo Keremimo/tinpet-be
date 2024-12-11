@@ -174,6 +174,7 @@ const getAllAnimals = async (req, res) => {
 const postAnimal = async (req, res) => {
 	try {
 		const { entry } = req.body
+		console.log(entry)
 		Pet.create(entry)
 		res.status(200).json({ message: "Successfully posted the new pet." })
 	} catch (err) {
