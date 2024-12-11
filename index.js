@@ -171,6 +171,15 @@ const getAllAnimals = async (req, res) => {
 	}
 }
 
+const postAnimal = async (req, res) => {
+	try {
+		const { entries } = req.body
+		/* const newPet = Pet. */
+	} catch (err) {
+
+	}
+}
+
 const findAnimals = async (req, res) => {
 	try {
 		const { searchParams } = req.body
@@ -189,7 +198,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.get('/api/v1/pets/get-all', isAuthenticated, getAllAnimals)
 
-app.post('/api/v1/pets/find', findAnimals)
+app.get('/api/v1/pets/find', findAnimals)
 
 app.post('/api/v1/register', register)
 
