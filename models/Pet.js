@@ -25,6 +25,14 @@ const petSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    size: {
+        type: String,
+        enum: {
+            values: ["Small", "Medium", "Large"],
+            message: "Can only be Small, Medium, Large. Case sensitive (Did you input 'small'?)"
+        },
+        required: true
+    },
     species: {
         type: String,
         enum: {
@@ -57,6 +65,9 @@ const petSchema = new mongoose.Schema({
                 message: "Can only be Apartment, Small, Medium or Large."
             }
         },
+        energetic: Boolean,
+        garden: Boolean,
+        independent: Boolean,
         children: Boolean,
         trained: Boolean,
 
