@@ -185,8 +185,8 @@ const postAnimal = async (req, res) => {
 const findAnimals = async (req, res) => {
 	try {
 		const { searchParams } = req.body
+		console.log(searchParams)
 		const foundPets = await Pet.find({ ...searchParams })
-		console.log(req.query.id, foundPets)
 		res.status(200).json({ foundPets })
 	} catch (err) {
 		res.status(500).json({
