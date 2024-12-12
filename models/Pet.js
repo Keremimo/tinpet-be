@@ -65,6 +65,7 @@ const petSchema = new mongoose.Schema({
                 message: "Can only be Apartment, Small, Medium or Large."
             }
         },
+        noise: Boolean,
         energetic: Boolean,
         garden: Boolean,
         independent: Boolean,
