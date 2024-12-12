@@ -186,7 +186,7 @@ const findAnimals = async (req, res) => {
 	try {
 		const { searchParams } = req.body
 		console.log(searchParams)
-		const foundPets = await Pet.find({ ...searchParams })
+		const foundPets = await Pet.find({ searchParams: { ...searchParams } })
 		res.status(200).json({ foundPets })
 	} catch (err) {
 		res.status(500).json({

@@ -52,27 +52,24 @@ const petSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    stats: {
-        house: {
-            type: String,
-            enum: {
-                values: [
-                    "Apartment",
-                    "Small",
-                    "Medium",
-                    "Large"
-                ],
-                message: "Can only be Apartment, Small, Medium or Large."
-            }
-        },
-        noise: Boolean,
-        energetic: Boolean,
-        garden: Boolean,
-        independent: Boolean,
-        children: Boolean,
-        trained: Boolean,
-
+    house: {
+        type: String,
+        enum: {
+            values: [
+                "Apartment",
+                "Small",
+                "Medium",
+                "Large"
+            ],
+            message: "Can only be Apartment, Small, Medium or Large."
+        }
     },
+    noise: Boolean,
+    energetic: Boolean,
+    garden: Boolean,
+    independent: Boolean,
+    children: Boolean,
+    trained: Boolean,
     picture: {
         type: String, //Add URL or img path
         default: '',
