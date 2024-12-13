@@ -70,7 +70,7 @@ app.post("/api/v1/logout", async function (req, res, next) {
     res.status(200).json({ message: "Logout success." })
   } catch (err) {
     console.log(err.toString())
-    res.status(500).json(err.toString())
+    res.status(500).json({ message: err.toString() })
   }
 })
 
