@@ -201,6 +201,11 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.get('/api/v1/pets/get-all', isAuthenticated, getAllAnimals)
 
+app.get("/api/v1/logout", function (req, res) {
+	req.logout();
+	res.redirect("/");
+});
+
 app.post('/api/v1/pets/find', findAnimals)
 
 app.post('/api/v1/pets/add', postAnimal)
