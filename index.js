@@ -62,9 +62,16 @@ app.post("/api/v1/pets/find", findAnimals)
 
 app.post("/api/v1/pets/add", postAnimal)
 
-app.get("/api/v1/logout", function (req, res) {
-  req.logout()
-  res.redirect("/")
+app.post("/api/v1/logout", async function (req, res, next) {
+  try {
+    console.log('Logout triggered!')
+    res.clearCookie("token", 'deleted')
+    res.clearCookie("connect.sid", 'deleted')
+    res.status(200).json({ message: "Logout success." })
+  } catch (err) {
+    console.log(err.toString())
+    res.status(500).json(err.toString())
+  }
 })
 
 app.post("/api/v1/register", register)
